@@ -6,10 +6,10 @@ def main():
     pygame.display.set_caption("시작 페이지")
     screen = pygame.display.set_mode((1200,700))
 
-    img_bg = pygame.image.load("BG_PG.png") #바탕이미지 1200x700크기
-    img_st_btn = pygame.image.load("st_btn.png")#게임시작 버튼 100x50크기
-    img_ct_btn = pygame.image.load("control_btn.png")#조작키 설명 버튼 100x50크기
-    img_ct_des = pygame.image.load("control_des.png")#조작키 설명서 이미지 800x500크기
+    img_bg = pygame.image.load("img/BG_PG.png") #바탕이미지 1200x700크기
+    img_st_btn = pygame.image.load("img/st_btn.png")#게임시작 버튼 100x50크기
+    img_ct_btn = pygame.image.load("img/control_btn.png")#조작키 설명 버튼 100x50크기
+    img_ct_des = pygame.image.load("img/control_des.png")#조작키 설명서 이미지 800x500크기
 
     # 버튼 위치 정의
     st_btn_plc = pygame.Rect(1000, 530, 100, 50)  # 게임 시작 버튼

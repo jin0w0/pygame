@@ -13,10 +13,10 @@ map = [
 ]
 
 # 이미지
-img_wall = pygame.image.load("wall.png")  # 벽1
-img_p = pygame.image.load("p_d.png")  # 플레이어
-img_e = pygame.image.load("end.png")  # end
-img_move = pygame.image.load("move.png")  # 움직이는 블럭
+img_wall = pygame.image.load("img/wall.png")  # 벽1
+img_p = pygame.image.load("img/p_d.png")  # 플레이어
+img_e = pygame.image.load("img/end.png")  # end
+img_move = pygame.image.load("img/move.png")  # 움직이는 블럭
 
 # 플레이어 시작 위치
 pl_x = 1
