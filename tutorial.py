@@ -29,7 +29,7 @@ level_map = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     [1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-    [1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 1, 1, 1, 0, 0, 2, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
     [1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
     [1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 1],
     [1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -41,6 +41,13 @@ level_map = [
     [1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 ]
+
+
+# 움직이는 블록 설정
+moveblock_image = pygame.image.load("img/moveblock.png")
+moveblock_image = pygame.transform.scale(moveblock_image, (TILE_SIZE, TILE_SIZE))
+initial_blocks = [[x, y] for y, row in enumerate(level_map) for x, tile in enumerate(row) if tile == 2]
+moveblocks = initial_blocks[:]
 
 # 파괴 가능한 벽 설정
 obstacle_image = pygame.image.load("img/obstacle.png")
@@ -72,6 +79,8 @@ def draw_map():
             rect = pygame.Rect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE)
             if tile == 1:  # 벽
                 pygame.draw.rect(screen, GRAY, rect)
+            elif tile == 2: #움직이는 블록
+                screen.blit(moveblock_image, rect.topleft)
             elif tile == 3 and [x, y] in destructible_walls:  # 파괴 가능한 벽
                 screen.blit(obstacle_image, rect.topleft)
             elif tile == 4 and [x, y] in monsters:  # 몬스터
