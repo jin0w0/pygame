@@ -1,117 +1,137 @@
 import pygame
 import sys
 
-# 맵[y][x] 12x7
-map = [
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],  
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+pygame.init()
+
+WHITE = (255, 255, 255)
+GRAY = (200, 200, 200)
+
+# 화면 설정
+screen_width = 1200
+screen_height = 700
+TILE_SIZE = 50
+screen = pygame.display.set_mode((screen_width, screen_height))
+pygame.display.set_caption("Heart of Truth")
+
+# 플레이어 초기 설정
+initial_player_pos = [4, 2]
+player_pos = initial_player_pos[:]
+player_images = {
+    "up": pygame.image.load("img/up.png"),
+    "down": pygame.image.load("img/down.png"),
+    "left": pygame.image.load("img/left.png"),
+    "right": pygame.image.load("img/right.png"),
+}
+current_image = player_images["down"]
+
+# 타일 맵 정의 (0: 빈 칸, 1: 벽, 3: 파괴 가능한 벽)
+level_map = [
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 1],
+    [1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 1],
+    [1, 1, 1, 1, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 ]
 
-# 이미지
-img_wall = pygame.image.load("img/wall.png")  # 벽1
-img_p = pygame.image.load("img/p_d.png")  # 플레이어
-img_e = pygame.image.load("img/end.png")  # end
-img_move = pygame.image.load("img/move.png")  # 움직이는 블럭
+# 파괴 가능한 벽 설정
+obstacle_image = pygame.image.load("img/obstacle.png")
+obstacle_image = pygame.transform.scale(obstacle_image, (TILE_SIZE, TILE_SIZE))
+initial_walls = [[x, y] for y, row in enumerate(level_map) for x, tile in enumerate(row) if tile == 3]
+destructible_walls = initial_walls[:]
+break_count = 0
+break_limit = 5
 
-# 플레이어 시작 위치
-pl_x = 1
-pl_y = 5
-# 움직이는 블럭의 위치 추적
-move_x = 3
-move_y = 3  
+# 방향키 설정
+MOVE_KEYS = {
+    pygame.K_LEFT: (-1, 0, "left"),
+    pygame.K_RIGHT: (1, 0, "right"),
+    pygame.K_UP: (0, -1, "up"),
+    pygame.K_DOWN: (0, 1, "down")
+}
 
-# 플레이어 움직임
-def player_move(event):
-    global pl_x, pl_y, move_x, move_y
-    if event.type == pygame.KEYDOWN:
-        # 'r' 키를 눌러서 플레이어 위치 초기화
-        if event.key == pygame.K_r:
-            pl_x = 1
-            pl_y = 5
-            move_x = 3
-            move_y = 3 
-        # 플레이어가 이동하려는 방향으로 블럭이 있는지 확인
-        if event.key == pygame.K_UP:
-            if map[pl_y - 1][pl_x] != 1:
-                pl_y -= 1
-                # 블럭 밀기
-                if pl_y == move_y and pl_x == move_x:
-                    if map[move_y - 1][move_x] != 1:  # 밀려날 자리가 벽이 아니라면
-                        move_y -= 1
-                    else:
-                        pl_y += 1
-        elif event.key == pygame.K_DOWN:
-            if map[pl_y + 1][pl_x] != 1:
-                pl_y += 1
-                # 블럭 밀기
-                if pl_y == move_y and pl_x == move_x:
-                    if map[move_y + 1][move_x] != 1:
-                        move_y += 1
-                    else:
-                        pl_y -= 1
-        elif event.key == pygame.K_LEFT:
-            if map[pl_y][pl_x - 1] != 1:
-                pl_x -= 1
-                # 블럭 밀기
-                if pl_x == move_x and pl_y == move_y:
-                    if map[move_y][move_x - 1] != 1:
-                        move_x -= 1
-                    else:
-                        pl_x += 1
-        elif event.key == pygame.K_RIGHT:
-            if map[pl_y][pl_x + 1] != 1:
-                pl_x += 1
-                # 블럭 밀기
-                if pl_x == move_x and pl_y == move_y:
-                    if map[move_y][move_x + 1] != 1:
-                        move_x += 1
-                    else:
-                        pl_x -= 1
+# 몬스터 설정
+monster_image = pygame.image.load("img/monster.png")
+monster_image = pygame.transform.scale(monster_image, (TILE_SIZE, TILE_SIZE))
 
-def main():
-    global pl_x, pl_y, move_x, move_y
-    pygame.init()
-    pygame.display.set_caption("튜토리얼")
-    screen = pygame.display.set_mode((1200, 700))
-    clock = pygame.time.Clock()
+# 맵에서 몬스터 초기 위치 찾기
+monsters = [[x, y] for y, row in enumerate(level_map) for x, tile in enumerate(row) if tile == 4]
 
-    while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
+# 맵 그리기
+def draw_map():
+    for y, row in enumerate(level_map):
+        for x, tile in enumerate(row):
+            rect = pygame.Rect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE)
+            if tile == 1:  # 벽
+                pygame.draw.rect(screen, GRAY, rect)
+            elif tile == 3 and [x, y] in destructible_walls:  # 파괴 가능한 벽
+                screen.blit(obstacle_image, rect.topleft)
+            elif tile == 4 and [x, y] in monsters:  # 몬스터
+                screen.blit(monster_image, rect.topleft)
 
-            player_move(event)
+# 캐릭터 이동
+def move_player(dx, dy, direction):
+    global player_pos, current_image, break_count
+    new_x, new_y = player_pos[0] + dx, player_pos[1] + dy
+    if 0 <= new_x < len(level_map[0]) and 0 <= new_y < len(level_map):
+        # 벽 충돌 처리
+        if [new_x, new_y] in destructible_walls:
+            if break_count < break_limit:  # 벽 부수기 제한 확인
+                destructible_walls.remove([new_x, new_y])
+                break_count += 1
+        elif level_map[new_y][new_x] != 1:
+            player_pos = [new_x, new_y]
+    current_image = player_images[direction]
 
-        # 화면
-        screen.fill((255, 255, 255))  # 화면 초기화
+# 게임 초기화 함수
+def reset_game():
+    global player_pos, destructible_walls, break_count
+    player_pos = initial_player_pos[:]
+    destructible_walls = initial_walls[:]
+    break_count = 0
 
-        # 벽
-        for y in range(7):
-            for x in range(12):
-                if map[y][x] == 1:
-                    screen.blit(img_wall, [x * 100, y * 100])
+# 몬스터 충돌 검사
+def monster_contact():
+    global death_count
+    for monster_pos in monsters:
+        if player_pos == monster_pos:  # 플레이어와 몬스터가 같은 위치에 있으면 충돌 발생
+            print("플레이어 사망!")
+            death_count += 1  
+            reset_game()  
 
-        # 엔드 위치
-        screen.blit(img_e, [1000, 100])
+# 게임 루프
+running = True
+death_count = 0  # 죽은 횟수 변수 추가
 
-        # 플레이어
-        screen.blit(img_p, [pl_x * 100, pl_y * 100])
+while running:
+    screen.fill(WHITE)
+    draw_map()
+    screen.blit(current_image, (player_pos[0] * TILE_SIZE, player_pos[1] * TILE_SIZE))
 
-        # 움직이는 블럭
-        screen.blit(img_move, [move_x * 100, move_y * 100])
+    # 남은 횟수와 죽은 횟수 출력
+    font = pygame.font.SysFont(None, 36)
+    info_text = font.render(f"Limit: {break_limit - break_count} | Death: {death_count}", True, (0, 0, 0))
+    text_rect = info_text.get_rect(center=(screen_width // 2, screen_height - 20))
+    screen.blit(info_text, text_rect)
 
-        # 플레이어가 end에 도달하면 종료
-        if pl_x == 10 and pl_y == 1:
-            pass
+    monster_contact()  # 몬스터와 플레이어의 충돌 검사
 
-        pygame.display.update()
-        clock.tick(10)
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+        elif event.type == pygame.KEYDOWN:
+            if event.key in MOVE_KEYS:
+                dx, dy, direction = MOVE_KEYS[event.key]
+                move_player(dx, dy, direction)  
 
-if __name__ == '__main__':
-    main()
+    pygame.display.flip()
+
+pygame.quit()

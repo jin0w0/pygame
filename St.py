@@ -33,8 +33,8 @@ def main():
 
                 # 게임 시작 버튼 클릭 (튜토리얼로 이동)
                 if st_btn_plc.collidepoint(mouse_x, mouse_y):
-                    import tutorial
-                    tutorial.main()
+                    import Mytutorial
+                    Mytutorial.main()
 
         screen.blit(img_bg, [0, 0])#바탕이미지 위치
         screen.blit(img_st_btn, [1000, 530])#게임시작버튼 위치
