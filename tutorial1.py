@@ -40,7 +40,7 @@ def main():
     [1, 1, 1, 1, 1, 7, 7, 7, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 3, 1, 1, 1, 0, 1],
     [1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1],
     [1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1],
-    [1, 1, 1, 1, 0, 0, 2, 0, 0, 3, 0, 0, 6, 0, 0, 1, 0, 0, 4, 0, 0, 1, 0, 1],
+    [1, 1, 1, 1, 0, 0, 2, 0, 0, 3, 0, 0, 0, 0, 0, 1, 0, 0, 4, 0, 0, 1, 0, 1],
     [1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1],
     [1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
@@ -57,6 +57,9 @@ def main():
 
     #블록(6) 놓는 위치 저장
     target_positions = [[x,y] for y, row in enumerate(level_map) for x, tile in enumerate(row) if tile == 6]
+
+    #사라지는 벽(7) 위치 저장
+    onoff_positions = [[x,y] for y, row in enumerate(level_map) for x, tile in enumerate(row) if tile == 7]
 
     # 타일 이미지 설정
     wall_image = pygame.image.load("img/wall.png")
@@ -145,6 +148,14 @@ def main():
             elif level_map[new_y][new_x] == 0 or level_map[new_y][new_x] == 5 or level_map[new_y][new_x] == 6:
                 player_pos = [new_x, new_y]
                 current_image = player_images[direction]
+            #target_position에 움직이는 블록이 있다면 맵에 있는 7을 0으로 바꿈
+            cnt = 0                
+            for [target_x,target_y] in target_positions:
+                if level_map[target_y][target_x] == 2:#2는 움직이는 벽 번호
+                    cnt +=1
+                if cnt == len(target_positions):
+                    for [off_x,off_y] in onoff_positions:
+                        level_map[off_y][off_x]=0
             
     while True:
         for event in pygame.event.get():
