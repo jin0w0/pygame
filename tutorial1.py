@@ -32,17 +32,17 @@ def main():
     level_map = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-    [1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-    [1, 1, 1, 1, 0, 2, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-    [1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-    [1, 1, 1, 1, 0, 0, 5, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-    [1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-    [1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-    [1, 1, 1, 1, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-    [1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-    [1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-    [1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 1],
+    [1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1],
+    [1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1],
+    [1, 1, 1, 1, 0, 0, 2, 0, 0, 1, 0, 0, 5, 0, 0, 1, 0, 0, 5, 0, 0, 1, 0, 1],
+    [1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1],
+    [1, 1, 1, 1, 0, 0, 0, 0, 6, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1],
+    [1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 3, 1, 1, 1, 0, 1],
+    [1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1],
+    [1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1],
+    [1, 1, 1, 1, 0, 0, 2, 0, 0, 3, 0, 0, 6, 0, 0, 1, 0, 0, 4, 0, 0, 1, 0, 1],
+    [1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1],
+    [1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 ]
 
@@ -52,8 +52,11 @@ def main():
     break_count = 0
     break_limit = 5
 
-    #포탈 위치 저장
+    #포탈(5) 위치 저장
     portal_positions = [[x,y] for y, row in enumerate(level_map) for x, tile in enumerate(row) if tile == 5]
+
+    #블록(6) 놓는 위치 저장
+    target_positions = [[x,y] for y, row in enumerate(level_map) for x, tile in enumerate(row) if tile == 6]
 
     # 타일 이미지 설정
     wall_image = pygame.image.load("img/wall.png")
@@ -70,6 +73,9 @@ def main():
 
     portal_img = pygame.image.load("img/portal.png")
     portal_img = pygame.transform.scale(portal_img,(TILE_SIZE,TILE_SIZE))
+
+    wall_targets_img = pygame.image.load("img/target.png") #블록 놓는 곳
+    wall_targets_img = pygame.transform.scale(wall_targets_img,(TILE_SIZE,TILE_SIZE))
 
     # 방향키 설정
     MOVE_KEYS = {
@@ -93,6 +99,8 @@ def main():
                     screen.blit(goal_image, rect.topleft)
                 elif tile == 5:
                     screen.blit(portal_img, rect.topleft)
+                elif [x,y] in target_positions:#(6 블럭 놓는 곳)
+                    screen.blit(wall_targets_img, rect.topleft)
 
     def move_player(dx, dy, direction):
         nonlocal player_pos, current_image, break_count
@@ -103,7 +111,7 @@ def main():
             if [new_x, new_y] in movable_walls:
                 move_x, move_y = new_x + dx, new_y + dy
                 if 0 <= move_x < len(level_map[0]) and 0 <= move_y < len(level_map):
-                    if level_map[move_y][move_x] == 0:  # 밀려날 자리가 비어 있으면
+                    if level_map[move_y][move_x] == 0 or level_map[move_y][move_x] == 6:  # 밀려날 자리가 비어 있으면
                         movable_walls.remove([new_x, new_y])
                         movable_walls.append([move_x, move_y])
                         level_map[new_y][new_x] = 0
@@ -129,7 +137,7 @@ def main():
                 sys.exit()
             
             # 일반 이동
-            elif level_map[new_y][new_x] == 0 or level_map[new_y][new_x] == 5:
+            elif level_map[new_y][new_x] == 0 or level_map[new_y][new_x] == 5 or level_map[new_y][new_x] == 6:
                 player_pos = [new_x, new_y]
                 current_image = player_images[direction]
             
