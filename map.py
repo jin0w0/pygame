@@ -13,3 +13,31 @@
         [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 6, 1, 0, 0, 0, 1],
         [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
     ]
+
+    # 몬스터 설정
+    monsters = [
+        {
+            "current_pos": [8, 7],
+            "direction": 1,
+            "move_type": "y",
+            "image": "monster3",
+            "move_delay": 300,  # 이동 속도
+            "last_move_time": pygame.time.get_ticks()
+        },
+        {
+            "current_pos": [22, 9],
+            "direction": -1,
+            "move_type": "x",
+            "image": "monster1",
+            "move_delay": 500,
+            "last_move_time": pygame.time.get_ticks()
+        },
+        {
+            "current_pos": [15, 5],
+            "direction": -1,
+            "move_type": "y",
+            "image": "monster2",
+            "move_delay": 700,
+            "last_move_time": pygame.time.get_ticks()
+        }
+    ]
