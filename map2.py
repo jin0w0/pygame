@@ -32,17 +32,17 @@ def main():
     level_map = [
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1],
-    [1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1],
-    [1, 1, 1, 1, 0, 0, 2, 0, 0, 1, 0, 0, 5, 0, 0, 1, 0, 0, 5, 0, 0, 1, 1, 1],
-    [1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1],
-    [1, 1, 1, 1, 0, 0, 0, 0, 6, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1],
-    [1, 1, 1, 1, 1, 7, 7, 7, 1, 1, 1, 0, 0, 0, 1, 1, 1, 3, 3, 3, 1, 1, 1, 1],
-    [1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1],
-    [1, 1, 1, 1, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1],
-    [1, 1, 1, 1, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 1, 0, 0, 4, 0, 0, 1, 1, 1],
-    [1, 1, 1, 1, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1],
-    [1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1],
+    [1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 0, 0, 0, 0, 2, 0, 1, 0, 0, 0, 1, 0, 4, 0, 1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 11, 11, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 0, 1, 0, 0, 2, 0, 0, 1, 1, 21, 1, 1, 11, 11, 1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 0, 1, 2, 1, 3, 1, 0, 1, 1, 0, 0, 0, 0, 0, 2, 0, 1, 1, 1],
+    [1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 1],
+    [1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 2, 1, 1, 0, 0, 0, 2, 0, 0, 0, 1, 1, 1],
+    [1, 1, 1, 1, 1, 0, 1, 2, 0, 0, 5, 0, 20, 20, 0, 2, 1, 1, 0, 0, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 0, 1, 1, 0, 0, 2, 0, 0, 0, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 10, 0, 0, 0, 5, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 ]
 
@@ -50,17 +50,17 @@ def main():
     movable_walls = [[x, y] for y, row in enumerate(level_map) for x, tile in enumerate(row) if tile == 2]
     destructible_walls = [[x, y] for y, row in enumerate(level_map) for x, tile in enumerate(row) if tile == 3]
     break_count = 0
-    break_limit = 5
+    break_limit = 1
 
     #포탈(5) 위치 저장
     portal_positions = [[x,y] for y, row in enumerate(level_map) for x, tile in enumerate(row) if tile == 5]
 
-    #블록(6) 놓는 위치 저장
-    target_positions = [[x,y] for y, row in enumerate(level_map) for x, tile in enumerate(row) if tile == 6]
-
-    #사라지는 벽(7) 위치 저장
-    onoff_positions = [[x,y] for y, row in enumerate(level_map) for x, tile in enumerate(row) if tile == 7]
-
+    #블록(10, 11) 놓는 위치 저장
+    target_positions0 = [[x,y] for y, row in enumerate(level_map) for x, tile in enumerate(row) if tile == 10]
+    target_positions1 = [[x,y] for y, row in enumerate(level_map) for x, tile in enumerate(row) if tile == 11]
+    #사라지는 벽(20,21) 위치 저장
+    onoff_positions0 = [[x,y] for y, row in enumerate(level_map) for x, tile in enumerate(row) if tile == 20]
+    onoff_positions1 = [[x,y] for y, row in enumerate(level_map) for x, tile in enumerate(row) if tile == 21]
     # 타일 이미지 설정
     wall_image = pygame.image.load("img/wall.png")
     wall_image = pygame.transform.scale(wall_image, (TILE_SIZE, TILE_SIZE))
@@ -105,9 +105,9 @@ def main():
                     screen.blit(goal_image, rect.topleft)
                 elif tile == 5:
                     screen.blit(portal_img, rect.topleft)
-                elif [x,y] in target_positions:#(6 블럭 놓는 곳)
+                elif [x,y] in target_positions0 or [x,y] in target_positions1:#(6 블럭 놓는 곳)
                     screen.blit(targets_img, rect.topleft)
-                elif tile == 7:
+                elif tile == 20 or tile == 21:
                     screen.blit(onoffwall_img, rect.topleft)
 
     def move_player(dx, dy, direction):
@@ -119,7 +119,7 @@ def main():
             if [new_x, new_y] in movable_walls:
                 move_x, move_y = new_x + dx, new_y + dy
                 if 0 <= move_x < len(level_map[0]) and 0 <= move_y < len(level_map):
-                    if level_map[move_y][move_x] == 0 or level_map[move_y][move_x] == 6:  # 밀려날 자리가 비어 있으면
+                    if level_map[move_y][move_x] == 0 or level_map[move_y][move_x] == 10 or level_map[move_y][move_x] == 11:  # 밀려날 자리가 비어 있으면, 블록 놓는곳 추가
                         movable_walls.remove([new_x, new_y])
                         movable_walls.append([move_x, move_y])
                         level_map[new_y][new_x] = 0
@@ -145,18 +145,24 @@ def main():
                 sys.exit()
             
             # 일반 이동
-            elif level_map[new_y][new_x] == 0 or level_map[new_y][new_x] == 5 or level_map[new_y][new_x] == 6:
+            elif level_map[new_y][new_x] == 0 or level_map[new_y][new_x] == 5 or level_map[new_y][new_x] == 20 or level_map[new_y][new_x] == 21:
                 player_pos = [new_x, new_y]
                 current_image = player_images[direction]
             #target_position에 움직이는 블록이 있다면 맵에 있는 7을 0으로 바꿈
-            cnt = 0                
-            for [target_x,target_y] in target_positions:
+            cnt0 = 0                
+            for [target_x,target_y] in target_positions0:
                 if level_map[target_y][target_x] == 2:#2는 움직이는 벽 번호
-                    cnt +=1
-                if cnt == len(target_positions):
-                    for [off_x,off_y] in onoff_positions:
+                    cnt0 +=1
+                if cnt0 == len(target_positions0):
+                    for [off_x,off_y] in onoff_positions0:
                         level_map[off_y][off_x]=0
-            
+            cnt1 = 0                
+            for [target_x,target_y] in target_positions1:
+                if level_map[target_y][target_x] == 2:#2는 움직이는 벽 번호
+                    cnt1 +=1
+                if cnt1 == len(target_positions1):
+                    for [off_x,off_y] in onoff_positions1:
+                        level_map[off_y][off_x]=0            
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
